@@ -61,10 +61,10 @@ def task_route():
     temperature = round(int(weather_resp["main"]["temp"]) - 273.15)
     resp_msg = {
         "client_ip": f"{ip_addr}",
-        "location": f"{location}",
-        "greeting": "Hello {}!, the temperature is {} degrees Celsius in {}".format(visitor_name, temperature, location)
+        "greeting": "Hello {}!, the temperature is {} degrees Celsius in {}".format(visitor_name, temperature, location),
+        "location": f"{location}"
     }
-    return jsonify({"Response": resp_msg})
+    return jsonify(resp_msg)
 
 
 if __name__ == "__main__":
