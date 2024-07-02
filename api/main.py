@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import requests
 import os
 
+
 """
 As much as there are not so much things here to explain, I just wish I play around with some comment.
 
@@ -13,23 +14,29 @@ app = Flask(__name__)
 
 
 # Getting API KEY From the environment for security reasons
-api_key = os.environ.get("GEOLOCATION_API_KEY")
-weather_api_key = os.environ.get("WEATHER_API_KEY")
+api_key = "b82801fd933a4a0aaf78ef1d82048722"
+weather_api_key = "cde973399f35f9cad81df7b715a40a45"
 
 
 # The home route, the marker may want to visit home and index some things, LOL
 @app.route('/')
 def home():
-    return "<h1>Welcome to the home page!</h1><p style='color: coral;'>Have a work around</p>"
+    # print(request.headers['X-Real-IP'])
+    # ip = request.headers['X-Real-IP']
+    user_agent = requests.get(f'https://api.ipgeolocation.io/user-agent?apiKey={api_key}')
+    print(user_agent.json()["userAgentString"])
+    return f"<h1>Welcome to the home page!<br> Your Ip is  </h1><p style='color: coral;'>Have a work around</p>"
 
 
 # The take route, the actual endpoint
 @app.route("/api/hello")
 def task_route():
+
     weather_url = "https://api.openweathermap.org/data/2.5/weather"
     # I set the default visitor to anonymous just in case the visitor does not provide their name.
     visitor_name = request.args.get('visitor_name', default="Anonymous")
-    location_getter_url = f"https://api.ipgeolocation.io/ipgeo?apiKey={api_key}"
+    ip = request.headers['X-Real-IP']
+    location_getter_url = f"https://ipapi.co/{ip}/json/"
     loc = requests.get(location_getter_url).json()
     ip_addr = loc["ip"]
     location = loc["city"]
